@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Location and Prices of crops</title>
+
+
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+    integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+    crossorigin=""/>
+
+
+
+    <style>
+
+      #mapid {
+        height: 50vh;
+        width: 50vw;
+       }
+    </style>
+
+
+
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+    integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+    crossorigin=""></script>
+  </head>
+
+  <body>
+    <!--
+    Reference for working with option and gettting their values and indexes using javascript
+    https://freakyjolly.com/demo/getDropDownValue_JavaScript_jQuery.html
+
+  -->
+
+    <!-- <p id="p">selectedIndex: 0</p> -->
+    <select id="singleSelectValueDDJS" class="form-control" onchange="singleSelectChangeValue()" style="
+    width: 25vw;
+    font-size: x-large;
+    height: 5vw;
+    /* align-items: center; */
+">
+
+      <option value="0" name="Crops">Crops...</option>
+      <option value="1" name="Wheat">Wheat</option>
+      <option value="2" name="Ragi">Ragi</option>
+      <option value="3" name="Rice">Rice</option>
+      <option value="4" name="Flour">Flour</option>
+      <option value="5" name="Barley">Barley</option>
+      <option value="6" name="Dal">Dal</option>
+      <option value="7" name="Rava">Rava</option>
+
+    </select>
+
+
+
+    <input type="text" id="textFieldValueJS" class="form-control"  placeholder="Selection any crop on the left" style="
+    width: 60vw;
+    font-size: xx-large;
+" readonly>
+
+
+    <p id="crop_info" style="
+    font-size: xx-large;
+">DEATAILS :</p>
+
+    <h2 style="
+    margin-top: 10vh;
+">The Maps has all the Areas populating the crops cultivated</h2>
+
+    <div id="mapid"></div>
+
+  </body>
+
+  <script type="text/javascript">
+
+
+
+      // Code for Leaflet maps
+
+      // 13.062105, 77.558016
+      //
+      var mymap = L.map('mapid').setView([13.062105, 77.558016], 8);
+
+      L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+    		maxZoom: 7,
+    		attribution: 'Map data &copy; <a href="http://thepuneeth1996p.cf/">Puneeth P</a> contributors, ' +
+    			'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+    			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    		id: 'mapbox.streets'
+    	}).addTo(mymap);
+
+
+
+
+
+      var marker = L.marker([13.0105, 77.5516],{
+        color: 'orange',
+      }).addTo(mymap);
+
+      var circle = L.circle([13.120589, 76.398926], {
+      color: 'gray',
+      fillColor: 'lightcyan',
+      fillOpacity: 0.3,
+      radius: 100000
+      }).addTo(mymap);
+
+
+      var polygon = L.polygon([
+      [13.483718, 76.882324],
+      [13.408992, 78.244629],
+      [12.006403, 78.046875]
+      ]).addTo(mymap);
+
+      marker.bindPopup("<b>Hello !</b><br>Here You can Find Your Crops.").openPopup();
+      circle.bindPopup("Fields that producing your crops.");
+      polygon.bindPopup("Suplliers and Retails of crops.");
+
+
+
+
+      function onMapClick(e) {
+          alert("You clicked the map at " + e.latlng);
+      }
+
+      var popup = L.popup();
+
+      function onMapClick(e) {
+          popup
+              .setLatLng(e.latlng)
+              .setContent("You clicked the map at " + e.latlng.toString())
+              .openOn(mymap);
+      }
+
+      mymap.on('click', onMapClick);
+
+
+
+
+
+
+
+
+
+
+
+
+    function singleSelectChangeValue() {
+        //Getting Value
+        //var selValue = document.getElementById("singleSelectDD").value;
+        var selObj = document.getElementById("singleSelectValueDDJS");
+        var selValue = selObj.options[selObj.selectedIndex].value;
+        var selName = selObj.options[selObj.selectedIndex].text;
+        //Setting Value
+        inputField = document.getElementById("textFieldValueJS");
+        cropInfo = document.getElementById("crop_info");
+        // inputField.value = selValue+" ---- "+selName;
+
+        switch (selValue) {
+          case "1":
+                  // alert("In Case 0");
+                  inputField.value = "Wheat = 350Rs";
+                  // alert(cropInfo);
+                  cropInfo.innerHTML= "Wheat (species of Triticum) is a cereal grain.\nPeople eat it most often in the form of bread.";
+
+                  var marker = L.marker([13.923898, 77.958984],{
+                    color: 'white',
+                    // shadowSize:   [500, 604],
+                    // iconAnchor:   [202, 904],
+                  }).addTo(mymap);
+
+                  var polygon = L.polygon([
+                  [14.486191, 77.77522],
+                  [12.83701, 77.720224],
+                  [13.655764, 78.666166]
+                  ]).addTo(mymap);
+
+                  break;
+
+
+
+
+
+
+          case "2":
+                  // alert("In Case 1");
+                  inputField.value = " Ragi = 50Rs";
+                  cropInfo.innerHTML= "Ragi is a whole grain that is gluten-free and a staple in South India.\nIt is rich in fiber that helps with weight loss and diabetes.";
+
+                  var marker = L.marker([12.458266, 79.128164],{
+                    color: 'white',
+                    // shadowSize:   [500, 604],
+                    // iconAnchor:   [202, 904],
+                  }).addTo(mymap);
+
+                  var polygon = L.polygon([
+                  [11.943323, 78.699177],
+                  [12.77959, 78.995353],
+                  [12.565419, 79.644001]
+                  ]).addTo(mymap);
+
+                  break;
+
+
+
+
+
+
+
+
+
+          case "3":
+                  // alert("In Case 2");
+
+                  inputField.value = " Rice = 200Rs";
+                  cropInfo.innerHTML= "Rice is the seed of the grass species Oryza sativa (Asian rice) or Oryza glaberrima (African rice).";
+
+                  var marker = L.marker([12.179463, 77.44524],{
+                    color: 'white',
+                    // shadowSize:   [500, 604],
+                    // iconAnchor:   [202, 904],
+                  }).addTo(mymap);
+
+                  var polygon = L.polygon([
+                  [12.73677, 78.523175],
+                  [12.490417, 77.312702],
+                  [11.577976, 78.599923]
+                  ]).addTo(mymap);
+
+                  break;
+
+
+
+
+
+
+
+          case "4":
+                  // alert("In Case 3");
+                  inputField.value = " Flour = 650Rs";
+                  cropInfo.innerHTML= "Those flours made from hard wheats are high in protein and generally are used for quick and yeast breads.";
+
+                  var marker = L.marker([12.800997, 79.225402],{
+                    color: 'white',
+                    // shadowSize:   [500, 604],
+                    // iconAnchor:   [202, 904],
+                  }).addTo(mymap);
+
+                  var polygon = L.polygon([
+                  [13.442355, 78.972418],
+                  [12.929402, 80.171345],
+                  [12.018481, 79.136602]
+                  ]).addTo(mymap);
+
+
+                  break;
+
+
+
+
+
+
+
+          case "5":
+                  // alert("In Case 4");
+                  inputField.value = " Barley = 115Rs";
+                  cropInfo.innerHTML= "Barley. Barley (Hordeum vulgare), a member of the grass family, is a major cereal grain grown in temperate climates globally.";
+                  break;
+
+
+
+
+
+
+
+          case "6":
+                  // alert("In Case 5");
+                  inputField.value = " Dal = 235Rs";
+                  cropInfo.innerHTML= "Dal is a term used in the Indian subcontinent for dried, split pulses. The term is also used for various soups prepared from these pulses. ";
+                  break;
+
+
+
+
+
+
+
+          case "7":
+                  // alert("In Case 6");
+                  inputField.value = " Rava = 35Rs";
+                  cropInfo.innerHTML= "Bombay rava or ravva, is a wheat product and a form of semolina. Rava is made by grinding husked wheat and is used in Indian cuisine to make rava dosa, rava idli, upma, khichdis";
+                  break;
+
+
+
+
+
+
+
+
+          default: inputField.value = " Crops are available . . . ";
+
+        }
+    }
+
+
+    var popup = L.popup()
+    .setLatLng([12.403333, 77.563477])
+    .setContent("Hey Find all crops sold here!!")
+    .openOn(mymap);
+
+
+
+
+  </script>
+
+</html>
